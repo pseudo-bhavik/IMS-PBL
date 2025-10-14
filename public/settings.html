@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - KJSIT IMS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h2>KJSIEIT</h2>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="transactions.html">Transactions</a>
+            <a href="reports.html" id="reportsLink">Reports</a>
+            <a href="settings.html" class="active" id="settingsLink">Settings</a>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <span id="userDisplay"></span>
+            </div>
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>System Settings</h1>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Categories</h3>
+                    <button class="btn-primary" onclick="openAddCategoryModal()">Add Category</button>
+                </div>
+                <div id="categoriesList"></div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Departments</h3>
+                    <button class="btn-primary" onclick="openAddDepartmentModal()">Add Department</button>
+                </div>
+                <div id="departmentsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="categoryModalTitle">Add Category</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Category</button>
+                    <button type="button" class="btn-secondary" id="cancelCategoryBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="departmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="departmentModalTitle">Add Department</h2>
+            <form id="departmentForm">
+                <input type="hidden" id="departmentId">
+                <div class="form-group">
+                    <label for="departmentName">Department Name</label>
+                    <input type="text" id="departmentName" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Department</button>
+                    <button type="button" class="btn-secondary" id="cancelDepartmentBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/mock_data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = getCurrentUser();
+            if (user) {
+                if (user.role !== 'admin' && user.role !== 'staff') {
+                    const reportsLink = document.getElementById('reportsLink');
+                    if (reportsLink) reportsLink.style.display = 'none';
+                }
+                if (user.role !== 'admin') {
+                    const settingsLink = document.getElementById('settingsLink');
+                    if (settingsLink) settingsLink.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

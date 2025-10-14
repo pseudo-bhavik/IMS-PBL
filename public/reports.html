@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - KJSIT IMS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h2>KJSIEIT</h2>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="transactions.html">Transactions</a>
+            <a href="reports.html" class="active">Reports</a>
+            <a href="settings.html" id="settingsLink">Settings</a>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <span id="userDisplay"></span>
+            </div>
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Report Generator</h1>
+        </div>
+
+        <div class="card" style="margin-bottom: 32px;">
+            <h3>Generate Report</h3>
+            <form id="reportForm">
+                <div class="form-group">
+                    <label for="reportType">Report Type</label>
+                    <select id="reportType" required>
+                        <option value="">Select Report Type</option>
+                        <option value="inventory">Inventory Summary</option>
+                        <option value="transactions">Transaction History</option>
+                        <option value="borrowed">Borrowed Items Report</option>
+                        <option value="issued">Issued Items Report</option>
+                        <option value="lowstock">Low Stock Report</option>
+                        <option value="department">Department-wise Report</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="endDate">End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="reportDepartment">Department Filter</label>
+                    <select id="reportDepartment">
+                        <option value="">All Departments</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reportCategory">Category Filter</label>
+                    <select id="reportCategory">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-primary" onclick="generateReport()">Generate Report</button>
+                    <button type="button" class="btn-success" onclick="exportToPDF()" id="pdfBtn" style="display: none;">Export to PDF</button>
+                    <button type="button" class="btn-success" onclick="exportToCSV()" id="csvBtn" style="display: none;">Export to CSV</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" id="reportPreview" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="reportTitle">Report Preview</h3>
+                <span id="reportDate" style="color: var(--text-light);"></span>
+            </div>
+            <div id="reportContent"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/mock_data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/reports.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = getCurrentUser();
+            if (user) {
+                if (user.role !== 'admin' && user.role !== 'staff') {
+                    const reportsLink = document.getElementById('reportsLink');
+                    if (reportsLink) reportsLink.style.display = 'none';
+                }
+                if (user.role !== 'admin') {
+                    const settingsLink = document.getElementById('settingsLink');
+                    if (settingsLink) settingsLink.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
